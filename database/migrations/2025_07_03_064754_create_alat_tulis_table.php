@@ -9,10 +9,14 @@ return new class extends Migration {
     {
         Schema::create('alat_tulis', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_alat');
-            $table->integer('stok');
-            $table->string('jenis')->nullable(); // jika ada jenis, tambahkan
-            $table->timestamps();
+$table->string('nama'); // Ganti ini agar cocok dengan form
+$table->string('kategori');
+$table->integer('harga');
+$table->integer('stok');
+$table->text('deskripsi')->nullable();
+$table->string('gambar')->nullable();
+$table->timestamps();
+
         });
     }
 
