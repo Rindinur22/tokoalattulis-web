@@ -61,4 +61,112 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="harga" class="form-label">Harga *</label>
-                                <div class="input-group
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" 
+                                           class="form-control @error('harga') is-invalid @enderror" 
+                                           id="harga" 
+                                           name="harga" 
+                                           value="{{ old('harga', $alatTulis->harga) }}" 
+                                           min="0" 
+                                           step="0.01" 
+                                           required>
+                                    @error('harga')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="stok" class="form-label">Stok *</label>
+                                <input type="number" 
+                                       class="form-control @error('stok') is-invalid @enderror" 
+                                       id="stok" 
+                                       name="stok" 
+                                       value="{{ old('stok', $alatTulis->stok) }}" 
+                                       min="0" 
+                                       required>
+                                @error('stok')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="deskripsi" class="form-label">Deskripsi</label>
+                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" 
+                                  id="deskripsi" 
+                                  name="deskripsi" 
+                                  rows="3" 
+                                  placeholder="Masukkan deskripsi produk...">{{ old('deskripsi', $alatTulis->deskripsi) }}</textarea>
+                        @error('deskripsi')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="gambar" class="form-label">Gambar Produk</label>
+                        <input type="file" 
+                               class="form-control @error('gambar') is-invalid @enderror" 
+                               id="gambar" 
+                               name="gambar" 
+                               accept="image/*" 
+                               onchange="previewImage(this)">
+                        @error('gambar')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <div class="form-text">Format: JPG, PNG, GIF. Maksimal 2MB. Biarkan kosong jika tidak ingin mengubah gambar.</div>
+                        
+                        <div id="imagePreview" class="mt-2" 
+                             @if(!$alatTulis->gambar) style="display: none;" @endif>
+                            <img id="preview" 
+                                 src="{{ $alatTulis->gambar ? asset('images/' . $alatTulis->gambar) : '#' }}" 
+                                 alt="Preview" 
+                                 class="img-thumbnail" 
+                                 style="max-width: 200px;">
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ route('alat-tulis.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Kembali
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Perbarui Produk
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('scripts')
+<script>
+function previewImage(input) {
+    const preview = document.getElementById('preview');
+    const previewDiv = document.getElementById('imagePreview');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            previewDiv.style.display = 'block';
+        }
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        // If no new file is selected, revert to the existing image or hide if none
+        @if($alatTulis->gambar)
+            preview.src = "{{ asset('images/' . $alatTulis->gambar) }}";
+            previewDiv.style.display = 'block';
+        @else
+            previewDiv.style.display = 'none';
+        @endif
+    }
+}
+</script>
+@endsection
